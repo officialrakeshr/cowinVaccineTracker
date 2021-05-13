@@ -22,10 +22,10 @@
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
                         <ul class="nav nav-tabs" ng-init="view='dist'" style="background:#ccc">
-                            <li class="active" ng-click="view='dist';resetInterval()"><a data-toggle="tab" href="#home"
-                                    href="#">Find By
+                            <li class="active" ng-click="view='dist';resetInterval()"><a data-toggle="tab" href="#">Find
+                                    By
                                     District</a></li>
-                            <li ng-click="view='pin';resetInterval()"><a data-toggle="tab" href="#" href="#">Find By
+                            <li ng-click="view='pin';resetInterval()"><a data-toggle="tab">Find By
                                     Pin Code</a>
                             </li>
                         </ul>
@@ -240,15 +240,49 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <ul style="overflow:auto;width: 100%;">
-                                            <li ng-repeat="center in slotList7DaysMaster.centers">
+                                            <li>
                                                 <div class="panel panel-default">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-md-3">
-                                                            <h6>{{center.name}}</h6>
-                                                            <h6>Address: {{center.address}}</h6>
-                                                            <h6>Pin:{{center.pincode}}</h6>
-                                                        </div>
-                                                    </div>
+
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th>Center</th>
+                                                            <th ng-repeat="day in sevenDays"
+                                                                ng-bind="moment(day).format('DD-MMM-YYYY')"></th>
+                                                        </tr>
+                                                        <tr ng-repeat="center in slotList7DaysMaster.centers"
+                                                            ng-init="processSessionData(center)">
+                                                            <td>
+                                                                <h6>{{center.name}} Address: {{center.address}}
+                                                                    Pin:{{center.pincode}}</h6>
+                                                            </td>
+                                                            <td ng-repeat="day in sevenDays">
+                                                                <div class="row" ng-repeat="session in center.sessions"
+                                                                    ng-if="session.date==moment(day).format('DD-MM-YYYY')">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="panel panel-default"
+                                                                            ng-if="session.available_capacity">
+                                                                            <h6 
+                                                                                ng-if="session.available_capacity>0">
+                                                                                {{session.available_capacity}}</h6>
+                                                                            <h6 
+                                                                                ng-if="session.available_capacity==0">
+                                                                                Full Booked</h6>
+                                                                            <h6>
+                                                                                {{session.vaccine}}</h6>
+                                                                            <h6 >
+                                                                                {{session.fee_type}}</h6>
+                                                                            <h6>
+                                                                                {{session.min_age_limit}}+Years</h6>
+                                                                        </div>
+                                                                        <div class="panel panel-default"
+                                                                            ng-if="!session.available_capacity">
+                                                                            NA
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </div>
                                             </li>
                                         </ul>

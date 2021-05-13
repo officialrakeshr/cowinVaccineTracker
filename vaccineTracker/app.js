@@ -3,6 +3,8 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     $scope.appName = "Co-WIN Vaccine Tracker";
     var oneMin = 1000 * 60;
     var today = moment().format("DD-MM-YYYY");
+    $scope.sevenDays=[0,1,2,3,4,5,6].map(o=>moment().startOf('day').add(o,'days').toDate().getTime());
+    $scope.moment=moment;
     $scope.filter = {};
     $scope.selectedInterval = -1
     $scope.IntervalList = [{ name: "One Time", value: -1 }, { name: "30 Seconds", value: 0.5 }, { name: "1 Minutes", value: 1 }, { name: "2 Mins", value: 2 }, { name: "5 Mins", value: 5 }, { name: "10 Mins", value: 10 }, { name: "30 Mins", value: 30 }, { name: "1 Hour", value: 60 }]
@@ -198,6 +200,27 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
         }
 
     }
+
+    $scope.processSessionData=function(center){
+        for(day of $scope.sevenDays){
+            let date=moment(day).format('DD-MM-YYYY');
+            if(center.sessions){
+                let dateObj=center.sessions.filter(o=>{
+                    return o.date==date;
+                });
+                if(dateObj.length==0){
+                    center.sessions.push({'date':date});
+                }
+            }else{
+                if(!angular.isDefined(center.sessions)){
+                    center.sessions=[];
+                }
+                center.sessions.push({'date':date});
+            }
+        }
+        center.sessions.sort(function(a, b){return moment(a.date,'DD-MM-YYYY',true).toDate().getTime() - moment(b.date,'DD-MM-YYYY',true).toDate().getTime()})
+    }
+
     $scope.stopBeep = function () {
         $interval.cancel($scope.beepInterval);
         $scope.beepInterval = undefined;
