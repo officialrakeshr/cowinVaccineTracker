@@ -1,6 +1,6 @@
 <html>
-
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86">
     <script src="jquery-3.6.0.min.js"></script>
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-sm-offset-3">
+                    <div class="col-sm-6 col-sm-offset-3" ng-show="slotListTodayMaster.sessions.length>0">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Today's Slots</h3>
@@ -153,7 +153,7 @@
                                         </ul>
                                     </div>
                                     <div class="col-sm-12" ng-if="slotListToday.sessions.length>0">
-                                        <ul style="overflow:auto">
+                                        <ul style="overflow:auto;width: 100%;">
                                             <li ng-repeat="session in slotListToday.sessions"
                                                 ng-if="session.available_capacity > 0">
                                                 <div class="panel panel-default">
