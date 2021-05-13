@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
     <script src="jquery-3.6.0.min.js"></script>
@@ -108,7 +109,8 @@
                     <div class="col-sm-6 col-sm-offset-3" ng-show="slotListTodayMaster.sessions.length>0">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Today's Slots</h3>
+                                <h3 class="panel-title">Today's Slots <button class="btn btn-xs btn-info pull-right"
+                                        ng-if="beepInterval" ng-click="stopBeep()">Stop Alarm</button></h3>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -150,10 +152,12 @@
                                                     value="18">
                                                 <label for="18+">18 + Years</label>
                                             </li>
+                                            <li><a href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
+                                            </li>
                                         </ul>
                                     </div>
-                                    <div class="col-sm-12" ng-if="slotListToday.sessions.length>0" >
-                                        <a href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
+                                    <div class="col-sm-12" ng-if="slotListToday.sessions.length>0">
+
                                         <ul style="overflow:auto;width: 100%;">
                                             <li ng-repeat="session in slotListToday.sessions"
                                                 ng-if="session.available_capacity > 0">
@@ -178,6 +182,77 @@
                                                 </div>
                                             </li>
                                         </ul>
+                                        <!--<pre>{{slotListToday.sessions|json}}</pre>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-sm-offset-3" ng-show="slotList7DaysMaster.centers.length>0">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">7 Days Slots<button class="btn btn-xs btn-info pull-right"
+                                        ng-if="beepInterval" ng-click="stopBeep()">Stop Alarm</button></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <ul class="optionsUl">
+                                            <li>
+                                                <input class="styled-checkbox" id="COVAXIN" type="checkbox"
+                                                    ng-model="filter.isCovaxin7" ng-change="filterThisData(filter)"
+                                                    value="COVAXIN">
+                                                <label for="COVAXIN">COVAXIN</label>
+                                            </li>
+                                            <li>
+                                                <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
+                                                    ng-model="filter.isCovishield7" ng-change="filterThisData(filter)"
+                                                    value="COVISHIELD">
+                                                <label for="COVISHIELD">COVISHIELD</label>
+                                            </li>
+                                            <li>
+                                                <input class="styled-checkbox" id="Free" type="checkbox"
+                                                    ng-model="filter.isFree7" ng-change="filterThisData(filter)"
+                                                    value="Free">
+                                                <label for="Free">Free</label>
+                                            </li>
+                                            <li>
+                                                <input class="styled-checkbox" id="Paid" type="checkbox"
+                                                    ng-model="filter.isPaid7" ng-change="filterThisData(filter)"
+                                                    value="Paid">
+                                                <label for="Paid">Paid</label>
+                                            </li>
+                                            <li>
+                                                <input class="styled-checkbox" id="45+" type="checkbox"
+                                                    ng-model="filter.is457" ng-change="filterThisData(filter)"
+                                                    value="45">
+                                                <label for="45+">45+ Years</label>
+                                            </li>
+                                            <li>
+                                                <input class="styled-checkbox" id="18+" type="checkbox"
+                                                    ng-model="filter.is187" ng-change="filterThisData(filter)"
+                                                    value="18">
+                                                <label for="18+">18 + Years</label>
+                                            </li>
+                                            <li><a href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <ul style="overflow:auto;width: 100%;">
+                                            <li ng-repeat="center in slotList7DaysMaster.centers">
+                                                <div class="panel panel-default">
+                                                    <div class="row">
+                                                        <div class="col-sm-6 col-md-3">
+                                                            <h6>{{center.name}}</h6>
+                                                            <h6>Address: {{center.address}}</h6>
+                                                            <h6>Pin:{{center.pincode}}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <!--<pre>{{slotList7DaysMaster|json}}</pre>-->
                                         <!--<pre>{{slotListToday.sessions|json}}</pre>-->
                                     </div>
                                 </div>
