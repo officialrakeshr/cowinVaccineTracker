@@ -1,1 +1,1 @@
-# cowinVaccineTracker
+# cowinVaccineTracker App
