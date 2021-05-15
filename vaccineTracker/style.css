@@ -1,9 +1,6 @@
 label {
     color: black;
 }
-body,#main{
-    overflow: hidden;
-}
 ul {
     list-style-type: none;
     margin: 0;
