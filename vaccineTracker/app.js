@@ -45,7 +45,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     var intervalTrackByDistrict = function () {
         console.log("Date:", new Date());
         $scope.stopBeep();
-
+        $scope.showLoader=true;
         $timeout(function () {
             //todays view
             /**var findByDistrict = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today
@@ -61,7 +61,10 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
                 if (res.status == 200) {
                     $scope.slotList7DaysMaster = res.data;
                     $scope.filterThisData();
+                    $scope.showLoader=false;
                 }
+            },function err(){
+                $scope.showLoader=false;
             });
         }, 1000)
 
@@ -85,6 +88,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     var intervalTrackByPin = function () {
         console.log("Date:", new Date());
         $scope.stopBeep();
+        $scope.showLoader=true;
         //todays view
         $timeout(function () {
             /** var findByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" + $scope.selectedPin + "&date=" + today;
@@ -99,7 +103,10 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
                 if (res.status == 200) {
                     $scope.slotList7DaysMaster = res.data;
                     $scope.filterThisData();
+                    $scope.showLoader=false;
                 }
+            },function err(){
+                $scope.showLoader=false;
             })
         }, 1000)
         //7 Days
@@ -108,6 +115,8 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
 
     var beepEnable = false;
     $scope.filterThisData = function () {
+        $scope.showLoader=true;
+        $scope.stopBeep();
         beepEnable = false;
         var f;
         //vaccine
@@ -219,14 +228,17 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
             if (center.sessions && center.sessions.length > 0) {
                 if (center.sessions.filter(o => o.available_capacity > 0).length > 0) {
                     beepEnable = true;
-                }
+                    center.vaccine_available=true;
+                }else center.vaccine_available=false;
             }
         }
+        $scope.slotList7Days.centers.sort( (a,b) => b.vaccine_available - a.vaccine_available)
         if (beepEnable) {
             $scope.beepInterval = $interval(function () {
                 $timeout(beep, 500);
             }, 500);
         }
+        $scope.showLoader=false;
     }
 
     $scope.processSessionData = function (center) {

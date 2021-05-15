@@ -15,6 +15,7 @@
 
 <body>
     <div id="main" ng-app="vaxapp" ng-controller="vacCtrl" ng-cloak>
+        <div class="loading" ng-if="showLoader">Loading&#8230;</div>
         <div class="row">
             <div class="col-sm-12">
                 <h1 style="text-align:center">{{appName}} <a href="https://selfregistration.cowin.gov.in/"><img
@@ -196,16 +197,19 @@
                                         <ul style="overflow:auto;width: 100%;">
                                             <li>
                                                 <div>
-                                                    <table class="table table-condensed">
+                                                    <table class="table table-condensed table-striped">
                                                         <tr>
+                                                            <th>Sl.No</th>
                                                             <th>Center</th>
                                                             <th ng-repeat="day in sevenDays"
                                                                 ng-bind="moment(day).format('DD-MMM-YYYY')"></th>
                                                         </tr>
                                                         <tr ng-repeat="center in slotList7Days.centers"
                                                             ng-init="processSessionData(center)">
+                                                            <td><h6>{{$index+1}}</h6></td>
                                                             <td>
-                                                                <h6>{{center.name}} Address: {{center.address}}
+                                                                <h6>{{center.name}}</h6>
+                                                                <h6>{{center.address}}
                                                                     Pin:{{center.pincode}}</h6>
                                                             </td>
                                                             <td ng-repeat="day in sevenDays">
