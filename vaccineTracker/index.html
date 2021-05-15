@@ -140,14 +140,13 @@
                                             </li>
                                             <li>
                                                 <div class="pretty p-default p-smooth p-bigger">
-                                                    <div class="pretty p-default ">
-                                                        <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
-                                                            ng-model="filter.isCovishield"
-                                                            ng-change="filterThisData(filter)" value="COVISHIELD">
-                                                        <div class="state p-success">
-                                                            <label for="COVISHIELD">COVISHIELD</label>
-                                                        </div>
+                                                    <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
+                                                        ng-model="filter.isCovishield"
+                                                        ng-change="filterThisData(filter)" value="COVISHIELD">
+                                                    <div class="state p-success">
+                                                        <label for="COVISHIELD">COVISHIELD</label>
                                                     </div>
+                                                </div>
                                             </li>
                                             <li>
                                                 <div class="pretty p-default p-smooth p-bigger">
@@ -189,8 +188,6 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li><a class="btn btn-primary" href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
-                                            </li>
                                         </ul>
                                     </div>
                                     <div class="col-sm-12">
@@ -206,7 +203,9 @@
                                                         </tr>
                                                         <tr ng-repeat="center in slotList7Days.centers"
                                                             ng-init="processSessionData(center)">
-                                                            <td><h6>{{$index+1}}</h6></td>
+                                                            <td>
+                                                                <h6>{{$index+1}}</h6>
+                                                            </td>
                                                             <td>
                                                                 <h6>{{center.name}}</h6>
                                                                 <h6>{{center.address}}
