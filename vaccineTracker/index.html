@@ -75,7 +75,8 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">Start</button>
-                                                    <span ng-if="counter_inst>0">Refresh in {{selectedInterval*60-counter_inst}} Seconds</span>
+                                                    <span ng-if="counter_inst>0">Refresh in
+                                                        {{selectedInterval*60-counter_inst}} Seconds</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -111,7 +112,8 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">Start</button>
-                                                    <span ng-if="counter_inst>0">Refresh in {{selectedInterval*60-counter_inst}} Seconds</span>
+                                                    <span ng-if="counter_inst>0">Refresh in
+                                                        {{selectedInterval*60-counter_inst}} Seconds</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,6 +121,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-6 col-sm-offset-3" ng-show="slotList7DaysMaster.centers.length==0">
+                        <div class="alert alert-info">No Vaccine Info Available</div>
                     </div>
                     <div class="col-sm-6 col-sm-offset-3" ng-show="slotList7DaysMaster.centers.length>0">
                         <div class="panel panel-primary">
