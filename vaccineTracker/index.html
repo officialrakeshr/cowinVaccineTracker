@@ -75,6 +75,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">Start</button>
+                                                    <span ng-if="counter_inst>0">Refresh in {{selectedInterval*60-counter_inst}} Seconds</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -110,6 +111,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">Start</button>
+                                                    <span ng-if="counter_inst>0">Refresh in {{selectedInterval*60-counter_inst}} Seconds</span>
                                                 </div>
                                             </div>
                                         </div>

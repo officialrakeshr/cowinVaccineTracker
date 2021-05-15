@@ -5,6 +5,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     var today = moment().format("DD-MM-YYYY");
     $scope.sevenDays = [0, 1, 2, 3, 4, 5, 6].map(o => moment().startOf('day').add(o, 'days').toDate().getTime());
     $scope.moment = moment;
+    var timer;
     $scope.filter = {};
     $scope.selectedInterval = -1
     $scope.IntervalList = [{ name: "One Time", value: -1 }, { name: "30 Seconds", value: 0.5 }, { name: "1 Minutes", value: 1 }, { name: "2 Mins", value: 2 }, { name: "5 Mins", value: 5 }, { name: "10 Mins", value: 10 }, { name: "30 Mins", value: 30 }, { name: "1 Hour", value: 60 }]
@@ -46,6 +47,16 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
         console.log("Date:", new Date());
         $scope.stopBeep();
         $scope.showLoader=true;
+        if ($scope.selectedInterval != -1) {
+            let count=0;
+            if(timer){
+                $interval.cancel(timer);
+                timer=undefined;
+            }
+            timer=$interval(function(){
+                $scope.counter_inst=count++;
+            },1000,$scope.selectedInterval*60);
+        }  
         $timeout(function () {
             //todays view
             /**var findByDistrict = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today
@@ -64,7 +75,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
                     $scope.showLoader=false;
                 }
             },function err(){
-                $scope.showLoader=false;
+                $scope.showLoader=false;           
             });
         }, 1000)
 
@@ -89,6 +100,16 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
         console.log("Date:", new Date());
         $scope.stopBeep();
         $scope.showLoader=true;
+        if ($scope.selectedInterval != -1) {
+            let count=0;
+            if(timer){
+                $interval.cancel(timer);
+                timer=undefined;
+            }
+            timer=$interval(function(){
+               $scope.counter_inst=count++;
+            },1000,$scope.selectedInterval*60);
+        }  
         //todays view
         $timeout(function () {
             /** var findByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" + $scope.selectedPin + "&date=" + today;
@@ -98,12 +119,12 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
                      $scope.filterThisData();
                  }
              }) **/
-            var weeklyPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=" + $scope.selectedPin + "&date=" + today;
+            var weeklyPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=" + $scope.selectedPin + "&date=" + today; 
             $http.get(weeklyPin).then(function (res) {
                 if (res.status == 200) {
                     $scope.slotList7DaysMaster = res.data;
                     $scope.filterThisData();
-                    $scope.showLoader=false;
+                    $scope.showLoader=false;  
                 }
             },function err(){
                 $scope.showLoader=false;
@@ -274,7 +295,13 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     });
     $scope.resetInterval = function () {
         $scope.slotListToday = null;
-
+        $scope.slotList7DaysMaster=null;
+        $scope.slotList7Days=null;
+        if(timer){
+            $interval.cancel(timer);
+            timer=undefined;
+        }
+        $scope.counter_inst=0;
         if (angular.isDefined(interval)) {
             $interval.cancel(interval);
             interval = undefined;
