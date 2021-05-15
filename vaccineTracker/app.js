@@ -3,8 +3,8 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     $scope.appName = "Co-WIN Vaccine Tracker";
     var oneMin = 1000 * 60;
     var today = moment().format("DD-MM-YYYY");
-    $scope.sevenDays=[0,1,2,3,4,5,6].map(o=>moment().startOf('day').add(o,'days').toDate().getTime());
-    $scope.moment=moment;
+    $scope.sevenDays = [0, 1, 2, 3, 4, 5, 6].map(o => moment().startOf('day').add(o, 'days').toDate().getTime());
+    $scope.moment = moment;
     $scope.filter = {};
     $scope.selectedInterval = -1
     $scope.IntervalList = [{ name: "One Time", value: -1 }, { name: "30 Seconds", value: 0.5 }, { name: "1 Minutes", value: 1 }, { name: "2 Mins", value: 2 }, { name: "5 Mins", value: 5 }, { name: "10 Mins", value: 10 }, { name: "30 Mins", value: 30 }, { name: "1 Hour", value: 60 }]
@@ -45,25 +45,26 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     var intervalTrackByDistrict = function () {
         console.log("Date:", new Date());
         $scope.stopBeep();
-        
+
         $timeout(function () {
             //todays view
-            var findByDistrict = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today
+            /**var findByDistrict = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today
             $http.get(findByDistrict).then(function (res) {
                 if (res.status == 200) {
                     $scope.slotListTodayMaster = res.data;
                     $scope.filterThisData();
                 }
-            });
+            });**/
             //7 Days
-            var weeklyDist="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today;
+            var weeklyDist = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=" + $scope.selectedDistrict + "&date=" + today;
             $http.get(weeklyDist).then(function (res) {
                 if (res.status == 200) {
                     $scope.slotList7DaysMaster = res.data;
+                    $scope.filterThisData();
                 }
             });
         }, 1000)
-        
+
     }
     /////////////////////////////////////////////
 
@@ -86,18 +87,18 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
         $scope.stopBeep();
         //todays view
         $timeout(function () {
-            var findByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" + $scope.selectedPin + "&date=" + today;
-            $http.get(findByPin).then(function (res) {
-                if (res.status == 200) {
-                    $scope.slotListTodayMaster = res.data;
-                    $scope.filterThisData();
-                    beep();
-                }
-            })
-            var weeklyPin="https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=" + $scope.selectedPin + "&date=" + today;
+            /** var findByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=" + $scope.selectedPin + "&date=" + today;
+             $http.get(findByPin).then(function (res) {
+                 if (res.status == 200) {
+                     $scope.slotListTodayMaster = res.data;
+                     $scope.filterThisData();
+                 }
+             }) **/
+            var weeklyPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=" + $scope.selectedPin + "&date=" + today;
             $http.get(weeklyPin).then(function (res) {
                 if (res.status == 200) {
                     $scope.slotList7DaysMaster = res.data;
+                    $scope.filterThisData();
                 }
             })
         }, 1000)
@@ -105,8 +106,9 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
     }
     /////////////////////////////////////////////////
 
-
+    var beepEnable = false;
     $scope.filterThisData = function () {
+        beepEnable = false;
         var f;
         //vaccine
         if ($scope.filter.isCovaxin && !$scope.filter.isCovishield) {
@@ -184,7 +186,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
             f.min_age_limit = undefined;
         }
 
-        if (f) {
+        /**if (f) {
             $scope.slotListToday = {};
             $scope.slotListToday.sessions = $filter('filter')(angular.copy($scope.slotListTodayMaster.sessions), f);
         } else {
@@ -197,28 +199,54 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
                     $timeout(beep, 500);
                 }, 500);
             }
+        }**/
+        let fee_type = angular.copy(f.fee_type);
+        f.fee_type = undefined;
+        if (f) {
+            $scope.slotList7Days = {};
+            $scope.slotList7Days.centers = [];
+            for (let center of $scope.slotList7DaysMaster.centers) {
+                let c = angular.copy(center);
+                c.sessions = $filter('filter')(angular.copy(center.sessions), f);
+                if (c.sessions.length > 0 && (angular.isDefined(fee_type) ? (c.fee_type == fee_type) : true)) {
+                    $scope.slotList7Days.centers.push(c);
+                }
+            }
+        } else {
+            $scope.slotList7Days = angular.copy($scope.slotList7DaysMaster);
         }
-
-    }
-
-    $scope.processSessionData=function(center){
-        for(day of $scope.sevenDays){
-            let date=moment(day).format('DD-MM-YYYY');
-            if(center.sessions){
-                let dateObj=center.sessions.filter(o=>{
-                    return o.date==date;
-                });
-                if(dateObj.length==0){
-                    center.sessions.push({'date':date});
+        for (let center of $scope.slotList7Days.centers) {
+            if (center.sessions && center.sessions.length > 0) {
+                if (center.sessions.filter(o => o.available_capacity > 0).length > 0) {
+                    beepEnable = true;
                 }
-            }else{
-                if(!angular.isDefined(center.sessions)){
-                    center.sessions=[];
-                }
-                center.sessions.push({'date':date});
             }
         }
-        center.sessions.sort(function(a, b){return moment(a.date,'DD-MM-YYYY',true).toDate().getTime() - moment(b.date,'DD-MM-YYYY',true).toDate().getTime()})
+        if (beepEnable) {
+            $scope.beepInterval = $interval(function () {
+                $timeout(beep, 500);
+            }, 500);
+        }
+    }
+
+    $scope.processSessionData = function (center) {
+        for (day of $scope.sevenDays) {
+            let date = moment(day).format('DD-MM-YYYY');
+            if (center.sessions) {
+                let dateObj = center.sessions.filter(o => {
+                    return o.date == date;
+                });
+                if (dateObj.length == 0) {
+                    center.sessions.push({ 'date': date });
+                }
+            } else {
+                if (!angular.isDefined(center.sessions)) {
+                    center.sessions = [];
+                }
+                center.sessions.push({ 'date': date });
+            }
+        }
+        center.sessions.sort(function (a, b) { return moment(a.date, 'DD-MM-YYYY', true).toDate().getTime() - moment(b.date, 'DD-MM-YYYY', true).toDate().getTime() })
     }
 
     $scope.stopBeep = function () {

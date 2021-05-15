@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-theme.min.css">
+    <link rel="stylesheet" href="pretty-checkbox.min.css">
 </head>
 
 <body>
@@ -22,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
                         <ul class="nav nav-tabs" ng-init="view='dist'" style="background:#ccc">
-                            <li class="active" ng-click="view='dist';resetInterval()"><a data-toggle="tab" href="#">Find
+                            <li class="active" ng-click="view='dist';resetInterval()"><a data-toggle="tab">Find
                                     By
                                     District</a></li>
                             <li ng-click="view='pin';resetInterval()"><a data-toggle="tab">Find By
@@ -82,7 +83,7 @@
                         </div>
                         <div class="panel panel-primary" ng-show="view=='pin'">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Please enter details to check vaccine availability</h3>
+                                <h3 class="panel-title">Please enter details to find out the vaccine details</h3>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -91,8 +92,18 @@
                                         <div class="col-sm-12">
                                             <div class="col-sm-12">
                                                 <div class="form-group">
-                                                    <label for="exampleFormControlSelect2">Pin Code *</label>
-                                                    <input type="text" ng-model="selectedPin" class="form-control" />
+                                                    <label for="slotPinFormSelect2">Pin Code *</label>
+                                                    <input type="text" ng-model="selectedPin" class="form-control"
+                                                        required />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlSelect4">Track Interval *</label>
+                                                    <select class="form-control" id="slotPinFormSelect5"
+                                                        ng-model="selectedInterval" required
+                                                        ng-options="t.value as t.name for t in IntervalList">
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
@@ -106,88 +117,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-sm-offset-3" ng-show="slotListTodayMaster.sessions.length>0">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Today's Slots <button class="btn btn-xs btn-info pull-right"
-                                        ng-if="beepInterval" ng-click="stopBeep()">Stop Alarm</button></h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <ul class="optionsUl">
-                                            <li>
-                                                <input class="styled-checkbox" id="COVAXIN" type="checkbox"
-                                                    ng-model="filter.isCovaxin" ng-change="filterThisData(filter)"
-                                                    value="COVAXIN">
-                                                <label for="COVAXIN">COVAXIN</label>
-                                            </li>
-                                            <li>
-                                                <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
-                                                    ng-model="filter.isCovishield" ng-change="filterThisData(filter)"
-                                                    value="COVISHIELD">
-                                                <label for="COVISHIELD">COVISHIELD</label>
-                                            </li>
-                                            <li>
-                                                <input class="styled-checkbox" id="Free" type="checkbox"
-                                                    ng-model="filter.isFree" ng-change="filterThisData(filter)"
-                                                    value="Free">
-                                                <label for="Free">Free</label>
-                                            </li>
-                                            <li>
-                                                <input class="styled-checkbox" id="Paid" type="checkbox"
-                                                    ng-model="filter.isPaid" ng-change="filterThisData(filter)"
-                                                    value="Paid">
-                                                <label for="Paid">Paid</label>
-                                            </li>
-                                            <li>
-                                                <input class="styled-checkbox" id="45+" type="checkbox"
-                                                    ng-model="filter.is45" ng-change="filterThisData(filter)"
-                                                    value="45">
-                                                <label for="45+">45+ Years</label>
-                                            </li>
-                                            <li>
-                                                <input class="styled-checkbox" id="18+" type="checkbox"
-                                                    ng-model="filter.is18" ng-change="filterThisData(filter)"
-                                                    value="18">
-                                                <label for="18+">18 + Years</label>
-                                            </li>
-                                            <li><a href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-12" ng-if="slotListToday.sessions.length>0">
-
-                                        <ul style="overflow:auto;width: 100%;">
-                                            <li ng-repeat="session in slotListToday.sessions"
-                                                ng-if="session.available_capacity > 0">
-                                                <div class="panel panel-default">
-                                                    <h5>{{session.name}}</h5>
-                                                    <span class="label label-info">{{session.vaccine}}</span>
-                                                    <span class="label"
-                                                        ng-class="session.fee_type=='Free'?'label-success':'label-danger'">{{session.fee_type}}</span>
-                                                    <span
-                                                        class="label label-primary">{{session.min_age_limit}}+Years</span>
-                                                    <span
-                                                        class="label label-danger">Availability:{{session.available_capacity}}</span>
-                                                    <br>
-                                                    <br>
-                                                    <ul>
-                                                        <li>Slots: <span ng-repeat="slot in session.slots"
-                                                                style="margin-right:5px"
-                                                                class="label label-default">{{slot}}</span> </li>
-                                                    </ul>
-
-                                                    <p>Address: {{session.address}} Pin:{{session.pincode}}</p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <!--<pre>{{slotListToday.sessions|json}}</pre>-->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-sm-6 col-sm-offset-3" ng-show="slotList7DaysMaster.centers.length>0">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -196,43 +125,68 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12 mg-b-10">
                                         <ul class="optionsUl">
                                             <li>
-                                                <input class="styled-checkbox" id="COVAXIN" type="checkbox"
-                                                    ng-model="filter.isCovaxin7" ng-change="filterThisData(filter)"
-                                                    value="COVAXIN">
-                                                <label for="COVAXIN">COVAXIN</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <input class="styled-checkbox" id="COVAXIN" type="checkbox"
+                                                        ng-model="filter.isCovaxin" ng-change="filterThisData(filter)"
+                                                        value="COVAXIN">
+                                                    <div class="state p-success">
+                                                        <label for="COVAXIN">COVAXIN</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
-                                                    ng-model="filter.isCovishield7" ng-change="filterThisData(filter)"
-                                                    value="COVISHIELD">
-                                                <label for="COVISHIELD">COVISHIELD</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <div class="pretty p-default ">
+                                                        <input class="styled-checkbox" id="COVISHIELD" type="checkbox"
+                                                            ng-model="filter.isCovishield"
+                                                            ng-change="filterThisData(filter)" value="COVISHIELD">
+                                                        <div class="state p-success">
+                                                            <label for="COVISHIELD">COVISHIELD</label>
+                                                        </div>
+                                                    </div>
                                             </li>
                                             <li>
-                                                <input class="styled-checkbox" id="Free" type="checkbox"
-                                                    ng-model="filter.isFree7" ng-change="filterThisData(filter)"
-                                                    value="Free">
-                                                <label for="Free">Free</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <input class="styled-checkbox" id="Free" type="checkbox"
+                                                        ng-model="filter.isFree" ng-change="filterThisData(filter)"
+                                                        value="Free">
+                                                    <div class="state p-success">
+                                                        <label for="Free">Free</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <input class="styled-checkbox" id="Paid" type="checkbox"
-                                                    ng-model="filter.isPaid7" ng-change="filterThisData(filter)"
-                                                    value="Paid">
-                                                <label for="Paid">Paid</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <input class="styled-checkbox" id="Paid" type="checkbox"
+                                                        ng-model="filter.isPaid" ng-change="filterThisData(filter)"
+                                                        value="Paid">
+                                                    <div class="state p-success">
+                                                        <label for="Paid">Paid</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <input class="styled-checkbox" id="45+" type="checkbox"
-                                                    ng-model="filter.is457" ng-change="filterThisData(filter)"
-                                                    value="45">
-                                                <label for="45+">45+ Years</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <input class="styled-checkbox" id="45+" type="checkbox"
+                                                        ng-model="filter.is45" ng-change="filterThisData(filter)"
+                                                        value="45">
+                                                    <div class="state p-success">
+                                                        <label for="45+">45+ Years</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <input class="styled-checkbox" id="18+" type="checkbox"
-                                                    ng-model="filter.is187" ng-change="filterThisData(filter)"
-                                                    value="18">
-                                                <label for="18+">18 + Years</label>
+                                                <div class="pretty p-default p-smooth p-bigger">
+                                                    <input class="styled-checkbox" id="18+" type="checkbox"
+                                                        ng-model="filter.is18" ng-change="filterThisData(filter)"
+                                                        value="18">
+                                                    <div class="state p-success">
+                                                        <label for="18+">18 + Years</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li><a href="https://selfregistration.cowin.gov.in/">Go to Co-WIN Portal</a>
                                             </li>
@@ -241,15 +195,14 @@
                                     <div class="col-sm-12">
                                         <ul style="overflow:auto;width: 100%;">
                                             <li>
-                                                <div class="panel panel-default">
-
-                                                    <table class="table">
+                                                <div>
+                                                    <table class="table table-condensed">
                                                         <tr>
                                                             <th>Center</th>
                                                             <th ng-repeat="day in sevenDays"
                                                                 ng-bind="moment(day).format('DD-MMM-YYYY')"></th>
                                                         </tr>
-                                                        <tr ng-repeat="center in slotList7DaysMaster.centers"
+                                                        <tr ng-repeat="center in slotList7Days.centers"
                                                             ng-init="processSessionData(center)">
                                                             <td>
                                                                 <h6>{{center.name}} Address: {{center.address}}
@@ -260,23 +213,32 @@
                                                                     ng-if="session.date==moment(day).format('DD-MM-YYYY')">
                                                                     <div class="col-sm-12">
                                                                         <div class="panel panel-default"
-                                                                            ng-if="session.available_capacity">
-                                                                            <h6 
-                                                                                ng-if="session.available_capacity>0">
-                                                                                {{session.available_capacity}}</h6>
-                                                                            <h6 
-                                                                                ng-if="session.available_capacity==0">
-                                                                                Full Booked</h6>
+                                                                            ng-if="session.available_capacity>=0">
+                                                                            <h6 ng-if="session.available_capacity>0">
+                                                                                <span
+                                                                                    class="label label-primary">{{session.available_capacity}}</span>
+                                                                            </h6>
+                                                                            <h6 ng-if="session.available_capacity==0">
+                                                                                <span class="label label-danger">Full
+                                                                                    Booked</span>
+                                                                            </h6>
                                                                             <h6>
-                                                                                {{session.vaccine}}</h6>
-                                                                            <h6 >
-                                                                                {{session.fee_type}}</h6>
+                                                                                <span
+                                                                                    class="label label-success">{{session.vaccine}}</span>
+                                                                            </h6>
+                                                                            <h6>
+                                                                                {{center.fee_type}}</h6>
                                                                             <h6>
                                                                                 {{session.min_age_limit}}+Years</h6>
                                                                         </div>
                                                                         <div class="panel panel-default"
-                                                                            ng-if="!session.available_capacity">
-                                                                            NA
+                                                                            ng-if="!session.available_capacity && !session.vaccine">
+                                                                            <h6>
+                                                                                &nbsp;</h6>
+                                                                            <h5>
+                                                                                NA</h5>
+                                                                            <h6>
+                                                                                &nbsp;</h6>
                                                                         </div>
                                                                     </div>
                                                                 </div>
