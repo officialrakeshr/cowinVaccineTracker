@@ -115,7 +115,7 @@ app.controller('vacCtrl', function ($scope, $http, $interval, $filter, $timeout)
 
     var beepEnable = false;
     $scope.filterThisData = function () {
-        $scope.showLoader=true;
+        $scope.showLoader=true; 
         $scope.stopBeep();
         beepEnable = false;
         var f;
